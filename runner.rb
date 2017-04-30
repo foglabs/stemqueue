@@ -8,24 +8,25 @@ ActiveRecord::Base.establish_connection(:adapter => "postgresql"
                                         :host => "ec2-54-235-254-56.compute-1.amazonaws.com"
                                         :database => "d82nlgrl4gfqdc")
 
-def eat_queue(logger, item)
-  case item['type']
+# def eat_queue(logger, item)
+#   case item['type']
 
-  when 'sample'
+#   when 'sample'
   
-  when 'mix'
+#   when 'mix'
   
-  else
+#   else
 
-  end
+#   end
 
 
-end
+# end
 
 if __FILE__ == $0
 
   logger = Logger.new("/home/ec2-user/run.log", 'daily')
-
+  logger.info Sample.last.inspect
+  
   AWS.config({ :access_key_id => ENV['SQS_ACCESS'],
                :secret_access_key => ENV['SQS_SECRET'] })
 
