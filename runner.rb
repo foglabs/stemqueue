@@ -3,11 +3,11 @@ require 'pg'
 require 'aws-sdk'
 require 'carrierwave'
 
+require './uploaders/specimen_uploader'
 require './models/sample'
 require './models/song'
 require './models/song_sample'
 require './models/user'
-require './uploaders/specimen_uploader'
 
 ActiveRecord::Base.establish_connection(:adapter => "postgresql",
                                         :username => "oraudijrhpytsu",
