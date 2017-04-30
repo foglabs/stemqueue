@@ -1,6 +1,8 @@
 require 'active_record'
 require 'pg'
 require 'aws-sdk'
+require 'carrierwave'
+
 require './models/sample'
 require './models/song'
 require './models/song_sample'
