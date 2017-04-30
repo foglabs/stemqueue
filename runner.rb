@@ -5,6 +5,7 @@ require 'fog'
 require 'carrierwave'
 
 require './uploaders/specimen_uploader'
+require './initializers/carrierwave'
 require './models/sample'
 require './models/song'
 require './models/song_sample'
