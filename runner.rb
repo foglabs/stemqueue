@@ -1,6 +1,7 @@
 require 'active_record'
 require 'pg'
 require 'aws-sdk'
+require './models/*'
 
 ActiveRecord::Base.establish_connection(:adapter => "postgresql",
                                         :username => "oraudijrhpytsu",
