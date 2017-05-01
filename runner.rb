@@ -37,7 +37,7 @@ if __FILE__ == $0
   logger.info Sample.last.inspect
 
   Aws.config.update({
-    region: 'us-east-1',
+    region: 'us-east-1b',
     credentials: Aws::Credentials.new(ENV['SQS_ACCESS'], ENV['SQS_SECRET'])
   })
 
