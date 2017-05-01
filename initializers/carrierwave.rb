@@ -16,7 +16,7 @@
       aws_access_key_id: ENV['S3_ACCESS'],
       aws_secret_access_key: ENV['S3_SECRET']                   # required
     }
-    config.storage = :fog
+
     config.fog_directory  = ENV['S3_BUCKET']                                 # required
   end
 # end
