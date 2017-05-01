@@ -17,6 +17,7 @@
       aws_secret_access_key: ENV['S3_SECRET']                   # required
     }
 
+    config.fog_provider = 'fog/aws'
     config.fog_directory  = ENV['S3_BUCKET']                                 # required
   end
 # end
