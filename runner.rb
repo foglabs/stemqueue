@@ -17,19 +17,16 @@ ActiveRecord::Base.establish_connection(:adapter => "postgresql",
                                         :host => "ec2-54-235-254-56.compute-1.amazonaws.com",
                                         :database => "d82nlgrl4gfqdc")
 
-# def eat_queue(logger, item)
-#   case item['type']
+def eat_queue(logger, item)
+  case item['type']
+    when 'sample'
+      puts "SAMPLE: #{item}"    
+    when 'mix'
+      puts "MIX: #{item}"    
+    else
 
-#   when 'sample'
-  
-#   when 'mix'
-  
-#   else
-
-#   end
-
-
-# end
+  end
+end
 
 if __FILE__ == $0
 
@@ -61,7 +58,7 @@ if __FILE__ == $0
         queue_item = JSON.parse( message.body )
         
         begin
-          process_queue_item( logger, queue_item )
+          eat_queue( logger, queue_item )
         rescue Exception => e
           logger.error "Fuck! Exception: #{e} bt: #{e.backtrace}"
         end
