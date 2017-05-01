@@ -1,6 +1,6 @@
+require 'aws-sdk'
 require 'active_record'
 require 'pg'
-require 'aws-sdk'
 # require 'fog'
 # require 'carrierwave'
 
@@ -36,10 +36,10 @@ if __FILE__ == $0
   logger = Logger.new("/home/ec2-user/run.log", 'daily')
   logger.info Sample.last.inspect
 
-  AWS.config({ :access_key_id => ENV['SQS_ACCESS'],
+  Aws.config({ :access_key_id => ENV['SQS_ACCESS'],
                :secret_access_key => ENV['SQS_SECRET'] })
 
-  sqs_client = AWS::SQS::Client.new
+  sqs_client = Aws::SQS::Client.new
   queue = sqs_client.get_queue_url( { :queue_name => 'stemqueue' } )
   logger.info "Its ya boy Q"
   counter = 50
