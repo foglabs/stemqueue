@@ -62,6 +62,6 @@ class Song < ActiveRecord::Base
 
     sampinfo = {name: songname, category: 'mixes', userid: userid, url: "http://s3.amazonaws.com/stemden/audio/mixes/#{songname}.wav"}
     # SampleMaker.perform_async(sampinfo: sampinfo)
-    Sample.create(user: User.find(sampinfo[:userid]), name: sampinfo[:name], category: sampinfo[:category], remote_specimen_url: sampinfo[:url])
+    Sample.create(user_id: sampinfo[:userid], name: sampinfo[:name], category: sampinfo[:category], remote_specimen_url: sampinfo[:url])
   end
 end
