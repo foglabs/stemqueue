@@ -1,7 +1,7 @@
 require 'aws-sdk'
 require 'active_record'
 require 'pg'
-# require 'fog'
+require 'fog'
 require 'carrierwave'
 require './uploaders/specimen_uploader'
 # require './config/initializers/carrierwave'
