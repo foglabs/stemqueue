@@ -190,7 +190,6 @@ DEPENDENCIES
   aws-sdk
   carrierwave
   fog
-  fog-aws
   json (= 2.0.2)
   pg
 
