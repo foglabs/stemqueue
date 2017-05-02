@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
 
   validates :name, presence: true
 
-  # onlyforqueue
+  # onlyforqueue v
   # # Include default devise modules. Others available are:
   # # :confirmable, :lockable, :timeoutable and :omniauthable
   # devise :database_authenticatable, :registerable,
