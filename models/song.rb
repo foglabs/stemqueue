@@ -7,11 +7,7 @@ class Song < ActiveRecord::Base
   validates :user, presence: true
 
   def get_urls
-    urls = {samps: [], userid: user.id, username: name, songid: id}
-    # samples.each do |samp|
-    #   #gives url as username/filename.ext
-    #   urls << [samp.specimen.url.gsub(/\A(\w|\W)*audio\//, "")]
-    # end
+    urls = {samps: [], userid: user.id, songid: id}
 
     song_samples.each do |songsamp|
       urls[:samps] << {link: songsamp.sample.specimen.url.gsub(/\A(\w|\W)*audio\//, ""), gain: songsamp.gain}
@@ -20,24 +16,26 @@ class Song < ActiveRecord::Base
     urls
   end
 
-  def self.mix(songinfo)
+  def self.mix(songid)
     #last value of songinfo array is output name!
     # second to last is user id of song
-
-    songo = Song.find(songinfo['songid'])
+    songo = Song.find(songid)
     songname = songo.name
+
+    songinfo = songo.get_urls
+
     userid = songinfo['userid']
 
     filenames_string = ""
     counter = 0
 
-    songinfo.each do |url|
+    songinfo[:samps].each do |stemhash|
       # download the boy to the local folder
 
-      filename_noex = url[0].match(/\/(.*)\.{1}/)[1]
-      filename_ex = url[0].match(/\/(.*\z)/)[1]
+      filename_noex = stemhash[:link].match(/\/(.*)\.{1}/)[1]
+      filename_ex = stemhash[:link].match(/\/(.*\z)/)[1]
 
-      `s3cmd get s3://stemden/audio/#{url[0]} ./process/#{filename_ex}`
+      `s3cmd get s3://stemden/audio/#{stemhash[:link]} ./process/#{filename_ex}`
 
       # addcountertofilename for file uniqueness
       `mv ./process/#{filename_ex} ./process/#{counter.to_s + filename_ex}`
@@ -48,7 +46,7 @@ class Song < ActiveRecord::Base
         `/usr/sox-14.4.2/bin/sox -t mp3 ./process/#{filename_ex} -t wav ./process/#{filename_noex}.wav`
 
         # without extension
-        filenames_string += "-v #{url[1]} ./process/" + filename_noex + ".wav "
+        filenames_string += "-v #{stemhash[:gain]} ./process/" + filename_noex + ".wav "
       else
         #with extension
         filenames_string += "./process/" + filename_ex + " "
@@ -63,9 +61,7 @@ class Song < ActiveRecord::Base
     `rm -rf ./process/*`
 
     sampinfo = {name: songname, category: 'mixes', userid: userid, url: "http://s3.amazonaws.com/stemden/audio/mixes/#{songname}.wav"}
-
-    SampleMaker.perform_async(sampinfo: sampinfo)
+    # SampleMaker.perform_async(sampinfo: sampinfo)
+    Sample.create(user: User.find(sampinfo[:userid]), name: sampinfo[:name], category: sampinfo[:category], remote_specimen_url: sampinfo[:url])
   end
 end
-
-

@@ -9,9 +9,10 @@ class Sample < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
   validates :user, presence: true
 
+  # only for queue
   # mount_uploader :specimen, SpecimenUploader
 
-  def self.makesample(sampinfo)
-    Sample.create(user: User.find(sampinfo['userid']), name: sampinfo['name'], category: sampinfo['category'], remote_specimen_url: sampinfo['url'])
-  end
+  # def self.makesample(sampinfo)
+  #   Sample.create(user: User.find(sampinfo['userid']), name: sampinfo['name'], category: sampinfo['category'], remote_specimen_url: sampinfo['url'])
+  # end
 end

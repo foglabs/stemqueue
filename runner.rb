@@ -3,7 +3,6 @@ require 'active_record'
 require 'pg'
 # require 'fog'
 # require 'carrierwave'
-
 # require './uploaders/specimen_uploader'
 # require './config/initializers/carrierwave'
 require './models/sample'
@@ -19,19 +18,22 @@ ActiveRecord::Base.establish_connection(:adapter => "postgresql",
 
 def eat_queue(logger, item)
   case item['type']
-    when 'sample'
-      puts "SAMPLE: #{item}"    
+    # when 'sample'
+    #   puts "SAMPLE: #{item}"
+    #   s=Sample.makesample(item)
+    #   puts "CREATED: #{s}"
     when 'mix'
-      puts "MIX: #{item}"    
-    else
-
+      logger.info "MIX: #{item}"    
+      m=Song.mix(item['songid'])
+      logger.info "CREATED MIX: #{m∂}"
+  else
+    logger.info "type not found"
   end
 end
 
 if __FILE__ == $0
 
   logger = Logger.new("/home/ec2-user/run.log", 'daily')
-  logger.info Sample.last.inspect
 
   Aws.config.update({
     region: 'us-east-1',
@@ -40,7 +42,7 @@ if __FILE__ == $0
 
   sqs_client = Aws::SQS::Client.new
   queue = sqs_client.get_queue_url( { :queue_name => 'stemqueue' } )
-  logger.info "Its ya boy Q"
+  logger.info "Q-Com Online"
   counter = 50
 
   while true
@@ -55,10 +57,10 @@ if __FILE__ == $0
       response.messages.each do | message |
 
         logger.info "Eating  #{message.body}"
-        queue_item = JSON.parse( message.body )
+        qitem = JSON.parse( message.body )
         
         begin
-          eat_queue( logger, queue_item )
+          eat_queue( logger, qitem )
         rescue Exception => e
           logger.error "Fuck! Exception: #{e} bt: #{e.backtrace}"
         end
@@ -68,7 +70,7 @@ if __FILE__ == $0
         counter -= 1
       end
     else
-      sleep(120)
+      # sleep(120)
     end
   end
 end
