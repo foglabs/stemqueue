@@ -8,7 +8,7 @@ require 'pg'
 require './models/sample'
 require './models/song'
 require './models/song_sample'
-# require './models/user'
+require './models/user'
 
 ActiveRecord::Base.establish_connection(:adapter => "postgresql",
                                         :username => "oraudijrhpytsu",
