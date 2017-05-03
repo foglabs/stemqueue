@@ -42,7 +42,7 @@ def eat_queue(logger, item)
     when 'mix'
       logger.info "MIX: #{item}"    
       m=Song.mix(item['songid'])
-      logger.info "CREATED MIX: #{m∂}"
+      logger.info "CREATED MIX: #{m}"
   else
     logger.info "type not found"
   end
