@@ -16,7 +16,7 @@ class Song < ActiveRecord::Base
     urls
   end
 
-  def self.mix(songid)
+  def self.mix(logger, songid)
     #last value of songinfo array is output name!
     # second to last is user id of song
     songo = Song.find(songid)
