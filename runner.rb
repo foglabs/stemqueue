@@ -3,12 +3,28 @@ require 'active_record'
 require 'pg'
 require 'fog/aws'
 require 'carrierwave'
+require 'carrierwave/orm/activerecord'
+require 'carrierwave/storage/fog'
+
 require './uploaders/specimen_uploader'
-require './initializers/carrierwave'
+# require './initializers/carrierwave'
 require './models/sample'
 require './models/song'
 require './models/song_sample'
 require './models/user'
+
+
+CarrierWave.configure do |config|
+  config.fog_provider = 'fog/aws' 
+  config.fog_directory  = ENV['S3_BUCKET']                                 # required
+  config.fog_credentials = {
+    provider: 'AWS',                                                       # required
+    aws_access_key_id: ENV['S3_ACCESS'],
+    aws_secret_access_key: ENV['S3_SECRET'],                   # required
+    region: 'us-east-1'
+  }
+
+end
 
 ActiveRecord::Base.establish_connection(:adapter => "postgresql",
                                         :username => "oraudijrhpytsu",

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 gem 'aws-sdk'
-# gem 'fog'
+gem 'fog'
 gem 'fog-aws'
 gem 'carrierwave'
 
