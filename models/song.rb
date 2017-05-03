@@ -16,7 +16,7 @@ class Song < ActiveRecord::Base
     urls
   end
 
-  def scrub_fname(filename)
+  def self.scrub_fname(filename)
     # Split the name when finding a period which is preceded by some
     # character, and is followed by some character other than a period,
     # if there is no following period that is followed by something
@@ -36,7 +36,7 @@ class Song < ActiveRecord::Base
     #last value of songinfo array is output name!
     # second to last is user id of song
     songo = Song.find(songid)
-    songname = scrub_fname(songo.name)
+    songname = Song.scrub_fname(songo.name)
 
     songinfo = songo.get_urls
 
