@@ -56,7 +56,9 @@ class Song < ActiveRecord::Base
     end
 
     # mix them shits
-    `/usr/sox-14.4.2/bin/sox -m #{filenames_string}#{songname}.wav`
+    soxstring = "-m #{filenames_string}#{songname}.wav"
+    logger.info soxstring
+    `/usr/sox-14.4.2/bin/sox #{soxstring}`
 
     # upload them shits
     `s3cmd put -f --acl-public #{songname}.wav s3://stemden/audio/mixes/#{songname}.wav`
