@@ -40,8 +40,10 @@ class Song < ActiveRecord::Base
     songname = Song.scrub_fname(songo.name)
 
     # check for existing filename
-    checkname = Song.where(name: songname).first
+    checkname = Sample.where(name: songname).first
     if checkname
+
+      logger.info "Found existing sample with #{songname}!"
       iteration = checkname.name.match(/-\d\z/)
 
       if iteration
@@ -49,6 +51,8 @@ class Song < ActiveRecord::Base
       else
         songname = "#{songname}-2"
       end
+
+      logger.info "Name will be #{songname}..."
     end
 
     songinfo = songo.get_urls
@@ -62,30 +66,20 @@ class Song < ActiveRecord::Base
 
     files.each do |stemhash|
       # download the boy to the local folder
-
-      logger.info "#{stemhash.inspect}"
-
       stemhash[:filename_noex] = stemhash[:link].match(/\/(.*)\.{1}/)[1]
       stemhash[:filename_ex] = stemhash[:link].match(/\/(.*\z)/)[1]
       `s3cmd get s3://stemden/audio/#{stemhash[:link]} ./process/#{stemhash[:filename_ex]}`
       stemhash[:srate] = `/usr/sox-14.4.2/bin/sox --i -r ./process/#{stemhash[:filename_ex]}`.try(:to_i)
-
-
-      logger.info "#{stemhash.inspect}"
 
       if stemhash[:srate] != srate
         `/usr/sox-14.4.2/bin/sox ./process/#{stemhash[:filename_ex]} -r #{srate.to_i} ./process/rated-#{stemhash[:filename_ex]}`
         stemhash[:filename_ex] = "rated-#{stemhash[:filename_ex]}"
       end
 
-      logger.info "#{stemhash.inspect}"
-
-
       `mv ./process/#{stemhash[:filename_ex]} ./process/#{counter.to_s + stemhash[:filename_ex]}`
       stemhash[:filename_ex] = "#{counter.to_s + stemhash[:filename_ex]}"
 
-      logger.info "#{stemhash.inspect}"
-
+      logger.info "This sample right der #{stemhash.inspect}"
 
       filenames_string += "-v #{stemhash[:gain] || 0} ./process/#{stemhash[:filename_ex]} "
       counter += 1
