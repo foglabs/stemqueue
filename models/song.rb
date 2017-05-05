@@ -41,7 +41,7 @@ class Song < ActiveRecord::Base
 
     # check for existing filename
     checknames = Sample.where("name LIKE ?", "%#{songname}%").all.to_a
-    last = checknames.sort_by! {|s| s.name[-1].to_i }.first
+    last = checknames.sort_by! {|s| s.name[-1].to_i }.last
 
     if last
 
