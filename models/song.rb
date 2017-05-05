@@ -69,16 +69,25 @@ class Song < ActiveRecord::Base
     end
 
     # mix them shits
-    soxstring = "-m #{filenames_string}#{songname}.wav"
+    soxstring = "-m #{filenames_string} ./process/#{songname}.wav"
     logger.info "Mixing #{soxstring}"
     `/usr/sox-14.4.2/bin/sox #{soxstring}`
 
     # upload them shits
-    `s3cmd put -f --acl-public #{songname}.wav s3://stemden/audio/mixes/#{songname}.wav`
-    `rm -rf ./process/*`
+    # `s3cmd put -f --acl-public #{songname}.wav s3://stemden/audio/mixes/#{songname}.wav`
 
     sampinfo = {name: songname, category: 'mixes', userid: userid, url: "http://s3.amazonaws.com/stemden/audio/mixes/#{songname}.wav"}
     # SampleMaker.perform_async(sampinfo: sampinfo)
-    Sample.create(user_id: sampinfo[:userid], name: sampinfo[:name], category: sampinfo[:category], remote_specimen_url: sampinfo[:url])
+
+    sample = Sample.new(user_id: sampinfo[:userid], name: sampinfo[:name], category: sampinfo[:category])
+
+    File.open("./process/#{songname}.wav") do |f|
+      sample.specimen = f
+      sample.save
+    end
+    
+    `rm -rf ./process/*`
+    logger.info "Done with #{sample.id}"
+    sample
   end
 end
