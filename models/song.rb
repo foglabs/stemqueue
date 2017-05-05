@@ -51,6 +51,8 @@ class Song < ActiveRecord::Base
     files.each do |stemhash|
       # download the boy to the local folder
 
+      logger.info "#{stemhash.inspect}"
+
       stemhash[:filename_noex] = stemhash[:link].match(/\/(.*)\.{1}/)[1]
       stemhash[:filename_ex] = stemhash[:link].match(/\/(.*\z)/)[1]
       `s3cmd get s3://stemden/audio/#{stemhash[:link]} ./process/#{stemhash[:filename_ex]}`
