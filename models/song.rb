@@ -44,12 +44,12 @@ class Song < ActiveRecord::Base
     if checkname
 
       logger.info "Found existing sample with #{songname}!"
-      iteration = checkname.name.match(/-\d\z/)
+      iteration = checkname.name.match(/_\d\z/)
 
       if iteration
-        songname = "#{songname}-#{(checkname.name[-1].to_i)+1}"
+        songname = "#{songname}_#{(checkname.name[-1].to_i)+1}"
       else
-        songname = "#{songname}-2"
+        songname = "#{songname}_2"
       end
 
       logger.info "Name will be #{songname}..."
