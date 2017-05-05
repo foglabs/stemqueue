@@ -39,6 +39,18 @@ class Song < ActiveRecord::Base
     songo = Song.find(songid)
     songname = Song.scrub_fname(songo.name)
 
+    # check for existing filename
+    checkname = Song.where(name: songname).first
+    if checkname
+      iteration = checkname.name.match(/-\d\z/)
+
+      if iteration
+        songname = "#{songname}-#{(checkname.name[-1].to_i)+1}"
+      else
+        songname = "#{songname}-2"
+      end
+    end
+
     songinfo = songo.get_urls
     srate = songinfo[:srate]
     userid = songinfo[:userid]
