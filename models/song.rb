@@ -40,15 +40,18 @@ class Song < ActiveRecord::Base
     songname = Song.scrub_fname(songo.name)
 
     # check for existing filename
-    checkname = Sample.where(name: songname).first
-    if checkname
+    q = songname
+    checknames = Sample.where("name LIKE ?", "%#{q}%").all
+    last = checknames.order_by {|s| s.name[-1].to_i }.first
+
+    if last
 
       logger.info "Found existing sample with #{songname}!"
-      iteration = checkname.name.match(/_\d\z/)
+      iteration = last.name.match(/_\d\z/)
 
       if iteration
         logger.info "Iteration found"
-        songname = "#{songname}_#{(checkname.name[-1].to_i)+1}"
+        songname = "#{songname}_#{(last.name[-1].to_i)+1}"
       else
         logger.info "none found"
 
@@ -99,8 +102,6 @@ class Song < ActiveRecord::Base
     # `s3cmd put -f --acl-public #{songname}.wav s3://stemden/audio/mixes/#{songname}.wav`
 
     sampinfo = {name: songname, category: 'mixes', userid: userid, url: "http://s3.amazonaws.com/stemden/audio/mixes/#{songname}.wav"}
-    # SampleMaker.perform_async(sampinfo: sampinfo)
-
     sample = Sample.new(user_id: sampinfo[:userid], name: sampinfo[:name], category: sampinfo[:category])
 
     File.open("./process/#{songname}.wav") do |f|
