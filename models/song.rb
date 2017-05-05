@@ -72,8 +72,10 @@ class Song < ActiveRecord::Base
       stemhash[:srate] = `/usr/sox-14.4.2/bin/sox --i -r ./process/#{stemhash[:filename_ex]}`.try(:to_i)
 
       if stemhash[:srate] != srate
-        `/usr/sox-14.4.2/bin/sox ./process/#{stemhash[:filename_ex]} -r #{srate.to_i} ./process/rated-#{stemhash[:filename_ex]}`
-        stemhash[:filename_ex] = "rated-#{stemhash[:filename_ex]}"
+        `/usr/sox-14.4.2/bin/sox -c 2 ./process/#{stemhash[:filename_ex]} -r #{srate.to_i} ./process/ready-#{stemhash[:filename_ex]}`
+        stemhash[:filename_ex] = "ready-#{stemhash[:filename_ex]}"
+      else
+        `/usr/sox-14.4.2/bin/sox -c 2 ./process/#{stemhash[:filename_ex]} ./process/ready-#{stemhash[:filename_ex]}`
       end
 
       `mv ./process/#{stemhash[:filename_ex]} ./process/#{counter.to_s + stemhash[:filename_ex]}`
