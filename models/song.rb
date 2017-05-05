@@ -40,8 +40,7 @@ class Song < ActiveRecord::Base
     songname = Song.scrub_fname(songo.name)
 
     # check for existing filename
-    q = songname
-    checknames = Sample.where("name LIKE ?", "%#{q}%").all
+    checknames = Sample.where("name LIKE ?", "%#{songname}%").all.to_a
     last = checknames.order_by {|s| s.name[-1].to_i }.first
 
     if last
