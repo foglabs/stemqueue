@@ -64,7 +64,7 @@ class Song < ActiveRecord::Base
       `mv ./process/#{stemhash[:filename_ex]} ./process/#{counter.to_s + stemhash[:filename_ex]}`
       stemhash[:filename_ex] = "#{counter.to_s + stemhash[:filename_ex]}"
 
-      filenames_string += "-v #{stemhash[:gain] || 0} #{stemhash[:filename_ex]} "
+      filenames_string += "-v #{stemhash[:gain] || 0} ./process/#{stemhash[:filename_ex]} "
       counter += 1
     end
 
