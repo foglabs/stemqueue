@@ -54,10 +54,10 @@ class Song < ActiveRecord::Base
       stemhash[:filename_noex] = stemhash[:link].match(/\/(.*)\.{1}/)[1]
       stemhash[:filename_ex] = stemhash[:link].match(/\/(.*\z)/)[1]
       `s3cmd get s3://stemden/audio/#{stemhash[:link]} ./process/#{stemhash[:filename_ex]}`
-      stemhash[:srate] = `sox --i -r ./process/#{stemhash[:filename_ex]}`
+      stemhash[:srate] = `/usr/sox-14.4.2/bin/sox --i -r ./process/#{stemhash[:filename_ex]}`
 
       if stemhash[:srate] != srate
-        `sox ./process/#{stemhash[:filename_ex]} -r #{srate.to_i} ./process/rated-#{stemhash[:filename_ex]}`
+        `/usr/sox-14.4.2/bin/sox ./process/#{stemhash[:filename_ex]} -r #{srate.to_i} ./process/rated-#{stemhash[:filename_ex]}`
         stemhash[:filename_ex] = "rated-#{stemhash[:filename_ex]}"
       end
 
