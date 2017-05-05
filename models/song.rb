@@ -47,8 +47,11 @@ class Song < ActiveRecord::Base
       iteration = checkname.name.match(/_\d\z/)
 
       if iteration
+        logger.info "Iteration found"
         songname = "#{songname}_#{(checkname.name[-1].to_i)+1}"
       else
+        logger.info "none found"
+
         songname = "#{songname}_2"
       end
 
