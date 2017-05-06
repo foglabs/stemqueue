@@ -60,13 +60,13 @@ if __FILE__ == $0
   sqs_client = Aws::SQS::Client.new
   queue = sqs_client.get_queue_url( { :queue_name => 'stemqueue' } )
   logger.info "Q-Com Online"
-  counter = 50
+  # counter = 50
 
   while true
-    if counter <= 0
-      logger.info "Byebye Queue at #{Time.now}"
-      exit
-    end
+    # if counter <= 0
+    #   logger.info "Byebye Queue at #{Time.now}"
+    #   exit
+    # end
 
     response = sqs_client.receive_message( { :queue_url => queue.queue_url, :max_number_of_messages => 10, :visibility_timeout => 3600 } )
 
@@ -84,7 +84,7 @@ if __FILE__ == $0
 
         sqs_client.delete_message( {:queue_url => queue.queue_url, :receipt_handle => message.receipt_handle } )
 
-        counter -= 1
+        # counter -= 1
       end
     else
       # sleep(120)
