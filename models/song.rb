@@ -99,11 +99,11 @@ class Song < ActiveRecord::Base
     `/usr/sox-14.4.2/bin/sox #{soxstring}`
 
     # upload them shits
-    # `s3cmd put -f --acl-public #{songname}.wav s3://stemden/audio/mixes/#{songname}.wav`
+    `s3cmd put -f --acl-public #{songname}.wav s3://stemden/audio/mixes/#{songname}.wav`
 
     sampinfo = {name: songname, category: 'mixes', userid: userid, url: "http://s3.amazonaws.com/stemden/audio/mixes/#{songname}.wav"}
     sample = Sample.new(user_id: sampinfo[:userid], name: sampinfo[:name], category: sampinfo[:category], remote_specimen_url: sampinfo[:url])
-    sample.save
+
     # File.open("./process/#{songname}.wav") do |f|
     #   sample.specimen = f
     #   sample.save
