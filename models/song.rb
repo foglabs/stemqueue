@@ -102,12 +102,12 @@ class Song < ActiveRecord::Base
     # `s3cmd put -f --acl-public #{songname}.wav s3://stemden/audio/mixes/#{songname}.wav`
 
     sampinfo = {name: songname, category: 'mixes', userid: userid, url: "http://s3.amazonaws.com/stemden/audio/mixes/#{songname}.wav"}
-    sample = Sample.new(user_id: sampinfo[:userid], name: sampinfo[:name], category: sampinfo[:category])
-
-    File.open("./process/#{songname}.wav") do |f|
-      sample.specimen = f
-      sample.save
-    end
+    sample = Sample.new(user_id: sampinfo[:userid], name: sampinfo[:name], category: sampinfo[:category], remote_specimen_url: sampinfo[:url])
+    sample.save
+    # File.open("./process/#{songname}.wav") do |f|
+    #   sample.specimen = f
+    #   sample.save
+    # end
     
     `rm -rf ./process/*`
     logger.info "Done with #{sample.id}"
