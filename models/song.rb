@@ -106,9 +106,9 @@ class Song < ActiveRecord::Base
 
 uploader = SpecimenUploader.new
 File.open("./process/#{songname}.wav") do |file|
-  sample.specimen = uploader.store!(file)
+  sample.specimen = file
 end
-# uploader.retrieve_from_store!(self.file_name)
+
     
     sample.save
     `rm -rf ./process/*`
