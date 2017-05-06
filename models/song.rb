@@ -89,7 +89,7 @@ class Song < ActiveRecord::Base
 
       logger.info "This sample right der #{stemhash.inspect}"
 
-      filenames_string += "-v #{stemhash[:gain] || 0} ./process/#{stemhash[:filename_ex]} "
+      filenames_string += "-v #{stemhash[:gain] || 1} ./process/#{stemhash[:filename_ex]} "
       counter += 1
     end
 
@@ -104,10 +104,10 @@ class Song < ActiveRecord::Base
     sampinfo = {name: songname, category: 'mixes', userid: userid, url: "http://s3.amazonaws.com/stemden/audio/mixes/#{songname}.wav"}
     sample = Sample.new(user_id: sampinfo[:userid], name: sampinfo[:name], category: sampinfo[:category])
 
-uploader = SpecimenUploader.new
-File.open("./process/#{songname}.wav") do |file|
-  sample.specimen = file
-end
+    uploader = SpecimenUploader.new
+    File.open("./process/#{songname}.wav") do |file|
+      sample.specimen = file
+    end
 
     
     sample.save
